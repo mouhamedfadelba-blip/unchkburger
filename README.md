@@ -1,58 +1,250 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Guide de Contribution Git & GitHub
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Méthodologie et Flux de Travail en Équipe
 
-## About Laravel
+Ce document définit les standards et le flux de travail (**workflow**) obligatoires pour tous les membres de l'équipe de développement.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+L'adoption stricte de ce protocole permet de :
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* Garantir l'intégrité de la branche principale.
+* Éviter les pertes accidentelles de code.
+* Faciliter la revue de code par les pairs.
+* Maintenir un historique Git propre et compréhensible.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+# 1. Jour 1 : Configuration Initiale et Premier Clonage
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Les étapes suivantes ne doivent être exécutées qu'une seule fois par chaque développeur lors de son intégration au projet.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Étape 1.1 : Identification locale
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Avant toute action, configurez votre identité Git globale afin que vos commits soient correctement attribués à votre compte GitHub.
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git config --global user.name "Votre Prenom NOM"
+git config --global user.email "votre.email@exemple.com"
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## Étape 1.2 : Clonage du dépôt
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Récupérez l'intégralité du projet sur votre machine locale.
 
-## Code of Conduct
+```bash
+git clone URL_DU_DEPOT_GITHUB
+cd NOM_DU_DOSSIER_PROJET
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## Étape 1.3 : Vérification de la branche par défaut
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Assurez-vous que vous êtes positionné sur la branche principale stabilisée.
 
-## License
+```bash
+git checkout main
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+# 2. Flux de Travail Quotidien
+
+Ce cycle de développement doit être répété pour chaque nouvelle fonctionnalité, correction de bug ou modification du projet.
+
+---
+
+## Phase A : Avant de commencer à coder (Routine du matin)
+
+Il est impératif de synchroniser votre environnement local avec les dernières modifications validées par l'équipe afin de minimiser les conflits de fusion (*merge conflicts*).
+
+### 1. Basculer sur la branche principale
+
+```bash
+git checkout main
+```
+
+### 2. Récupérer les dernières modifications
+
+```bash
+git pull origin main
+```
+
+### 3. Créer une branche dédiée à votre tâche
+
+```bash
+git checkout -b feature/nom-de-votre-tache
+```
+
+---
+
+## Phase B : Pendant la session de développement
+
+Effectuez vos modifications de manière modulaire et évitez les commits contenant des changements non liés.
+
+### Vérifier l'état du dépôt
+
+```bash
+git status
+```
+
+### Ajouter les fichiers modifiés
+
+```bash
+git add .
+```
+
+### Enregistrer les changements
+
+```bash
+git commit -m "feat: integration du formulaire de connexion"
+```
+
+---
+
+## Phase C : Fin de tâche – Intégration et Publication
+
+Une fois le développement terminé et testé localement :
+
+### 1. Récupérer les éventuelles mises à jour de `main`
+
+```bash
+git pull origin main
+```
+
+### 2. Publier votre branche sur GitHub
+
+```bash
+git push origin feature/nom-de-votre-tache
+```
+
+### 3. Ouvrir une Pull Request (PR)
+
+Depuis l'interface GitHub :
+
+1. Accédez au dépôt.
+2. Sélectionnez votre branche.
+3. Cliquez sur **Compare & Pull Request**.
+4. Rédigez une description claire.
+5. Demandez une revue de code.
+6. Attendez la validation avant fusion.
+
+---
+
+# 3. Synthèse des Commandes Essentielles
+
+| Fréquence / Moment         | Objectif                      | Commande                                    |
+| -------------------------- | ----------------------------- | ------------------------------------------- |
+| Jour 1 uniquement          | Télécharger le projet         | `git clone [URL]`                           |
+| Chaque matin               | Synchroniser le dépôt local   | `git checkout main && git pull origin main` |
+| Avant de coder             | Créer une branche dédiée      | `git checkout -b feature/nom-tache`         |
+| Plusieurs fois par session | Sauvegarder l'avancement      | `git add . && git commit -m "..."`          |
+| Fin de tâche               | Envoyer le travail sur GitHub | `git push origin feature/nom-tache`         |
+
+---
+
+# 4. Règles de Conduite et Bonnes Pratiques
+
+## 🚫 Interdiction de pousser directement sur `main`
+
+La branche `main` doit toujours rester :
+
+* Stable
+* Testée
+* Fonctionnelle
+
+Toute modification doit obligatoirement passer par une **Pull Request**.
+
+---
+
+## 🌿 Convention de nommage des branches
+
+Utilisez les préfixes suivants :
+
+### Nouvelle fonctionnalité
+
+```text
+feature/nom-fonctionnalite
+```
+
+### Correction de bug
+
+```text
+bugfix/nom-correction
+```
+
+### Documentation
+
+```text
+docs/nom-documentation
+```
+
+---
+
+## 📝 Messages de commit professionnels
+
+Privilégiez les **Conventional Commits** :
+
+### Fonctionnalité
+
+```bash
+git commit -m "feat: ajout du système d'authentification"
+```
+
+### Correction
+
+```bash
+git commit -m "fix: correction du bug de connexion"
+```
+
+### Documentation
+
+```bash
+git commit -m "docs: mise à jour du guide d'installation"
+```
+
+### Refactoring
+
+```bash
+git commit -m "refactor: simplification du composant utilisateur"
+```
+
+---
+
+# Workflow Résumé
+
+```text
+main
+  │
+  ├── git pull origin main
+  │
+  └── feature/ma-tache
+          │
+          ├── git add .
+          ├── git commit
+          ├── git push
+          │
+          └── Pull Request
+                    │
+                    ▼
+                  main
+```
+
+---
+
+## Rappel Important
+
+✅ Toujours partir de `main` à jour.
+
+✅ Toujours créer une branche dédiée.
+
+✅ Faire des commits réguliers et explicites.
+
+✅ Ouvrir une Pull Request pour chaque tâche.
+
+❌ Ne jamais pousser directement sur `main`.
+
+❌ Ne jamais fusionner du code non testé.
+
+❌ Ne jamais travailler directement sur la branche principale.
