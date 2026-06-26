@@ -1,7 +1,7 @@
 <x-customer-layout>
     <div class="mb-10">
         <h1 class="text-3xl font-black text-slate-800">
-            Hello, <span class="text-orange-500">{{ Auth::user()->name }}</span> ! 👋
+            Hello, <span class="text-orange-500">{{ Auth::user()->name ?? 'Invité' }}</span> ! 👋
         </h1>
         <p class="text-slate-500 mt-2">Prêt pour le meilleur burger de Dakar ?</p>
     </div>
@@ -13,7 +13,7 @@
                 <span>🔔</span> Commande en cours
             </h2>
 
-            @if($latestOrder && in_array($latestOrder->status, ['en_attente', 'en_preparation', 'prete']))
+            @if(isset($latestOrder) && $latestOrder && in_array($latestOrder->status, ['en_attente', 'en_preparation', 'prete']))
                 <div class="bg-white rounded-3xl p-6 shadow-sm border border-orange-100 overflow-hidden relative">
                     <div class="absolute -right-4 -top-4 text-8xl opacity-5 grayscale">🍔</div>
 
@@ -66,15 +66,15 @@
                     <div class="space-y-4">
                         <div class="flex justify-between items-center opacity-80">
                             <span class="text-sm">Total dépensé</span>
-                            <span class="font-bold">{{ number_format($totalSpent, 0, ',', ' ') }} F</span>
+                            <span class="font-bold">{{ number_format($totalSpent ?? 0, 0, ',', ' ') }} F</span>
                         </div>
                         <div class="flex justify-between items-center opacity-80">
                             <span class="text-sm">Burgers dégustés</span>
-                            <span class="font-bold">{{ $burgersCount }} 🍔</span>
+                            <span class="font-bold">{{ $burgersCount ?? 0 }} 🍔</span>
                         </div>
                     </div>
                     <hr class="my-4 border-slate-700">
-                    <a href="{{ route('customer.orders.index') }}" class="block text-center text-sm font-bold text-orange-400 hover:text-orange-300">
+                    <a href="#" class="block text-center text-sm font-bold text-orange-400 hover:text-orange-300">
                         Voir tout l'historique →
                     </a>
                 </div>
