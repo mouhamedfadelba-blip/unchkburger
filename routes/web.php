@@ -7,5 +7,5 @@ Route::get('/', function () {
 });
 
 Route::get('/burgers', function () {
-    return view('.manager.burgers.index');
+    return view('manager.burgers.index');
 });
