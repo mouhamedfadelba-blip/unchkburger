@@ -1,102 +1,160 @@
 <x-customer-layout>
-    <div class="mb-8 border-b border-gray-200 pb-5">
-        <h1 class="text-2xl font-semibold text-gray-900">
-            Bonjour, {{ Auth::user()->name }}
-        </h1>
-        <p class="text-sm text-gray-500 mt-1">Gérez vos commandes et consultez l'historique de votre compte.</p>
-    </div>
+    <section class="grid gap-8 lg:grid-cols-[1.4fr_0.9fr]">
+        <div class="space-y-8">
+            <div class="relative overflow-hidden rounded-[2rem] border border-white/60 bg-slate-900 p-8 text-white shadow-[0_30px_80px_-35px_rgba(15,23,42,0.75)]">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(249,115,22,0.22),_transparent_28%),linear-gradient(135deg,_rgba(15,23,42,0.95),_rgba(30,41,59,0.98))]"></div>
+                <div class="relative grid gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-end">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.35em] text-orange-300/80">Client dashboard</p>
+                        <h1 class="mt-4 max-w-2xl text-4xl font-black tracking-tight text-white sm:text-5xl">
+                            Good food, clear status, and a dashboard that scales with your next features.
+                        </h1>
+                        <p class="mt-5 max-w-xl text-sm leading-6 text-slate-300 sm:text-base">
+                            A focused client space for tracking orders, account value, and future commerce actions without the clutter.
+                        </p>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <!-- Section: Commande en cours -->
-        <div class="lg:col-span-2 space-y-4">
-            <h2 class="text-lg font-medium text-gray-900 flex items-center gap-2">
-                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                Commande en cours
-            </h2>
-
-            @if($latestOrder && in_array($latestOrder->status, ['en_attente', 'en_preparation', 'prete']))
-                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-gray-100">
-                        <div>
-                            <span class="text-xs font-semibold uppercase tracking-wider text-gray-500">Commande N° {{ $latestOrder->numero_commande }}</span>
-                            <h3 class="text-lg font-medium text-gray-900 mt-1">
-                                @if($latestOrder->status == 'en_attente')
-                                    En attente de confirmation
-                                @elseif($latestOrder->status == 'en_preparation')
-                                    En cours de préparation
-                                @else
-                                    Prête pour le retrait
-                                @endif
-                            </h3>
-                        </div>
-                        <div class="bg-amber-50 px-3 py-1 rounded-full border border-amber-100 flex items-center gap-1.5">
-                            <div class="w-2 h-2 rounded-full {{ $latestOrder->status == 'prete' ? 'bg-green-500' : 'bg-amber-500 animate-pulse' }}"></div>
-                            <span class="text-amber-700 text-sm font-medium capitalize">{{ str_replace('_', ' ', $latestOrder->status) }}</span>
+                        <div class="mt-8 flex flex-wrap gap-3">
+                            <a href="#activity" class="rounded-full bg-white px-5 py-3 text-sm font-bold text-slate-900 transition hover:bg-slate-100">
+                                View activity
+                            </a>
+                            <a href="#account" class="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/10">
+                                Account summary
+                            </a>
                         </div>
                     </div>
 
-                    <div class="mt-6 relative">
-                        <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-amber-500 transition-all duration-500 ease-out"
-                                 style="width: {{ $latestOrder->status == 'en_attente' ? '33' : ($latestOrder->status == 'en_preparation' ? '66' : '100') }}%">
+                    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                        <div class="rounded-3xl border border-white/10 bg-white/8 p-5 backdrop-blur">
+                            <div class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-300">Total spent</div>
+                            <div class="mt-3 text-3xl font-black">{{ number_format($totalSpent ?? 0, 0, ',', ' ') }} F</div>
+                            <div class="mt-2 text-sm text-slate-300">Current account value across completed orders.</div>
+                        </div>
+                        <div class="rounded-3xl border border-white/10 bg-white/8 p-5 backdrop-blur">
+                            <div class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-300">Items ordered</div>
+                            <div class="mt-3 text-3xl font-black">{{ $burgersCount ?? 0 }}</div>
+                            <div class="mt-2 text-sm text-slate-300">A concise count that can later power loyalty logic.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="activity" class="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Activity</p>
+                        <h2 class="mt-2 text-2xl font-black tracking-tight text-slate-900">Current order status</h2>
+                    </div>
+
+                    <div class="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-bold text-slate-700">
+                        Live view ready
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    @if($latestOrder && in_array($latestOrder->status, ['en_attente', 'en_preparation', 'prete']))
+                        <div class="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-6">
+                            <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                                <div>
+                                    <div class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Order number</div>
+                                    <div class="mt-2 text-xl font-black text-slate-900">#{{ $latestOrder->numero_commande }}</div>
+                                    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                                        @if($latestOrder->status === 'en_attente')
+                                            Your order has been received and is waiting to enter the kitchen queue.
+                                        @elseif($latestOrder->status === 'en_preparation')
+                                            Your order is in progress. The kitchen team is preparing it now.
+                                        @else
+                                            Your order is ready. You can collect it as soon as possible.
+                                        @endif
+                                    </p>
+                                </div>
+
+                                <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm">
+                                    <div class="text-xs uppercase tracking-[0.22em] text-slate-400">Timeline</div>
+                                    <div class="mt-2 space-y-2">
+                                        <div class="flex items-center gap-2 {{ $latestOrder->status === 'en_attente' ? 'text-orange-600' : 'text-slate-500' }}">
+                                            <span class="h-2.5 w-2.5 rounded-full bg-current"></span> Validated
+                                        </div>
+                                        <div class="flex items-center gap-2 {{ $latestOrder->status === 'en_preparation' ? 'text-orange-600' : 'text-slate-500' }}">
+                                            <span class="h-2.5 w-2.5 rounded-full bg-current"></span> In kitchen
+                                        </div>
+                                        <div class="flex items-center gap-2 {{ $latestOrder->status === 'prete' ? 'text-orange-600' : 'text-slate-500' }}">
+                                            <span class="h-2.5 w-2.5 rounded-full bg-current"></span> Ready
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
+                                    <div class="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-700"
+                                         style="width: {{ $latestOrder->status === 'en_attente' ? '33' : ($latestOrder->status === 'en_preparation' ? '66' : '100') }}%"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex justify-between mt-3 text-xs font-medium text-gray-500">
-                            <span class="{{ $latestOrder->status == 'en_attente' ? 'text-amber-600 font-semibold' : '' }}">Validée</span>
-                            <span class="{{ $latestOrder->status == 'en_preparation' ? 'text-amber-600 font-semibold' : '' }}">En cuisine</span>
-                            <span class="{{ $latestOrder->status == 'prete' ? 'text-amber-600 font-semibold' : '' }}">Prête</span>
-                        </div>
-                    </div>
-                </div>
-            @else
-                <div class="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-8 text-center">
-                    <svg class="mx-auto h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                    </svg>
-                    <h3 class="mt-4 text-sm font-medium text-gray-900">Aucune commande active</h3>
-                    <p class="mt-1 text-sm text-gray-500">Vous n'avez pas de commande en cours pour le moment.</p>
-                    <div class="mt-6">
-                        <a href="/catalogue" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
-                            Nouvelle commande
-                        </a>
-                    </div>
-                </div>
-            @endif
-        </div>
+                    @else
+                        <div class="rounded-[1.5rem] border border-dashed border-slate-300 bg-slate-50 p-8">
+                            <div class="max-w-lg">
+                                <h3 class="text-xl font-black text-slate-900">No active order right now</h3>
+                                <p class="mt-3 text-sm leading-6 text-slate-600">
+                                    This space is ready for live order tracking, recent purchases, and future customer actions.
+                                </p>
+                            </div>
 
-        <!-- Section: Mon Compte -->
-        <div class="space-y-4">
-            <h2 class="text-lg font-medium text-gray-900 flex items-center gap-2">
-                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                </svg>
-                Résumé du compte
-            </h2>
-            
-            <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-                <dl class="space-y-4">
-                    <div class="flex justify-between items-center py-2 border-b border-gray-50">
-                        <dt class="text-sm text-gray-500">Total des dépenses</dt>
-                        <dd class="text-sm font-semibold text-gray-900">{{ number_format($totalSpent ?? 0, 0, ',', ' ') }} FCFA</dd>
-                    </div>
-                    <div class="flex justify-between items-center py-2 border-b border-gray-50">
-                        <dt class="text-sm text-gray-500">Articles commandés</dt>
-                        <dd class="text-sm font-semibold text-gray-900">{{ $burgersCount ?? 0 }}</dd>
-                    </div>
-                </dl>
-                <div class="mt-6">
-                    <a href="{{ route('customer.orders.index') ?? '#' }}" class="text-sm font-medium text-amber-600 hover:text-amber-700 flex items-center justify-center gap-1 group">
-                        Voir l'historique complet
-                        <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    </a>
+                            <div class="mt-6 flex flex-wrap gap-3">
+                                <a href="/catalogue" class="rounded-full bg-slate-900 px-5 py-3 text-sm font-bold text-white transition hover:bg-slate-800">
+                                    Start a new order
+                                </a>
+                                <a href="#account" class="rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50">
+                                    Review account
+                                </a>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
 
-    </div>
+        <aside id="account" class="space-y-6">
+            <div class="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Account</p>
+                <h2 class="mt-2 text-2xl font-black tracking-tight text-slate-900">Profile snapshot</h2>
+
+                <dl class="mt-6 space-y-4">
+                    <div class="rounded-2xl bg-slate-50 p-4">
+                        <dt class="text-sm font-medium text-slate-500">Name</dt>
+                        <dd class="mt-1 text-base font-bold text-slate-900">{{ auth()->user()?->name ?? 'Client' }}</dd>
+                    </div>
+                    <div class="rounded-2xl bg-slate-50 p-4">
+                        <dt class="text-sm font-medium text-slate-500">Email</dt>
+                        <dd class="mt-1 break-all text-base font-bold text-slate-900">{{ auth()->user()?->email ?? 'Not available' }}</dd>
+                    </div>
+                    <div class="rounded-2xl bg-slate-50 p-4">
+                        <dt class="text-sm font-medium text-slate-500">Total spent</dt>
+                        <dd class="mt-1 text-base font-bold text-slate-900">{{ number_format($totalSpent ?? 0, 0, ',', ' ') }} F</dd>
+                    </div>
+                    <div class="rounded-2xl bg-slate-50 p-4">
+                        <dt class="text-sm font-medium text-slate-500">Orders tracked</dt>
+                        <dd class="mt-1 text-base font-bold text-slate-900">{{ $burgersCount ?? 0 }}</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="rounded-[2rem] border border-slate-200 bg-slate-900 p-7 text-white shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Next step</p>
+                <h3 class="mt-2 text-2xl font-black tracking-tight">This dashboard is ready to grow.</h3>
+                <p class="mt-4 text-sm leading-6 text-slate-300">
+                    You can connect live orders, catalog actions, loyalty metrics, and payment history into this structure without redesigning the page.
+                </p>
+
+                <div class="mt-6 flex flex-col gap-3">
+                    <a href="#activity" class="rounded-full bg-white px-5 py-3 text-center text-sm font-bold text-slate-900 transition hover:bg-slate-100">
+                        Inspect activity
+                    </a>
+                    <a href="/catalogue" class="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-center text-sm font-bold text-white transition hover:bg-white/10">
+                        Go to catalogue
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </section>
 </x-customer-layout>
