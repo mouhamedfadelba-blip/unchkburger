@@ -2,41 +2,35 @@
 
 namespace App\Models;
 
-use Database\Factories\OrderFactory;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
-    /** @use HasFactory<OrderFactory> */
-    use HasFactory;
-    protected $fillable = ['user_id','numero_commande', 'status', 'total_price', 'total_amount'];
+    protected $fillable = [
+        'user_id',
+        'status',
+        'total_amount',
+    ];
 
-    public function burgers(): BelongsToMany
-    {
-        return $this->belongsToMany(Burger::class)->withPivot('quantity', 'unit_price')->withTimestamps();
-    }
+    protected $casts = [
+        'total_amount' => 'decimal:2',
+    ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function payment(): HasOne|Order|Builder
+    public function items(): HasMany
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasMany(OrderItem::class);
     }
 
-    protected static function booted(): void
+    public function payment(): HasOne
     {
-        static::creating(function ($order) {
-            if (empty($order->numero_commande)) {
-                $order->numero_commande = 'CMD-' . date('Ymd') . '-' . strtoupper(uniqid());
-            }
-        });
+        return $this->hasOne(Payment::class);
     }
 }

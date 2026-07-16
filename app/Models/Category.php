@@ -3,11 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
-    protected $fillable = ['nom', 'description'];
-    public function burgers()
+    protected $fillable = [
+        'name',
+        'description',
+    ];
+
+    public function burgers(): HasMany
     {
         return $this->hasMany(Burger::class);
     }

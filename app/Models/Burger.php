@@ -2,32 +2,34 @@
 
 namespace App\Models;
 
-use Database\Factories\BurgerFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Burger extends Model
 {
-    /** @use HasFactory<BurgerFactory> */
-    use HasFactory;
+    protected $fillable = [
+        'category_id',
+        'name',
+        'description',
+        'price',
+        'image',
+        'stock',
+        'is_available',
+    ];
 
-    /*Pour pouvoir faire create, update ou delete directement sur le modele
-    et eviter l'erreur Illuminate\Database\Eloquent\MassAssignmentException*/
-    protected $fillable = ['nom', 'unit_price', 'description', 'image', 'stock', 'category_id', 'is_archived'];
+    protected $casts = [
+        'price' => 'decimal:2',
+        'is_available' => 'boolean',
+    ];
 
     public function category(): BelongsTo
     {
-        /* belongsTo (relation un a un)
-        un burger est associer a un seul category*/
         return $this->belongsTo(Category::class);
     }
 
-    public function orders(): BelongsToMany
+    public function orderItems(): HasMany
     {
-        /*belongsToMany (relation un a plusieur)
-        un burger peut se trouver dans plusieur commande*/
-        return $this->belongsToMany(Order::class)->withPivot('quantity', 'unit_price');
+        return $this->hasMany(OrderItem::class);
     }
 }
